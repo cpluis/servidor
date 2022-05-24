@@ -40,7 +40,7 @@ public class Servidor extends Thread {
 // Objeto BufferedReader que o método irá receber.
     private BufferedReader bfr;
 
-    /* Aqui temos o método construtor que recebe o objeto socket como parâmetro
+    /*Aqui temos o método construtor que recebe o objeto socket como parâmetro
       que cria outro objeto tido BufferedReader, que aponta para stream do 
       cliente.*/
     public Servidor(Socket con) {
