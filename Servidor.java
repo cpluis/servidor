@@ -23,21 +23,22 @@ import javax.swing.JTextField;
    simultaneamente.*/
 public class Servidor extends Thread {
 
-// Aqui temos as declarações dos atributos estáticos e de instância:
-/* Cliente por exemplo é para armazenar a mensagem de cada cliente, por isso 
-   o Arraylist.*/
+// criando uma lista de clientes de tipo BufferedWriter para adicionar na conversa
     private static ArrayList<BufferedWriter> clientes;
-// Já o serveSocket é para criar o servidor, um apenas neste caso.
+// Aqui temos as declarações dos atributos estáticos para serem executados a necessidade criar objetos 
     private static ServerSocket server;
-// Objeto String que o método irá receber.
+// Aqui temos as declarações dos atributos estáticos para serem executados a necessidade criar objetos 
+
+   // atributo nome do tipo string no modo privado acessivel a classe
     private String nome;
-// Objeto Socket que o método irá receber.
+   
+// atributo con do tipo Socket 
     private Socket con;
-// Objeto InputStream que o método irá receber.
+// atributo in do tipo InputStream 
     private InputStream in;
-// Objeto InputStreamReader que o método irá receber.
+// atributo inr do tipo InputStreamReader 
     private InputStreamReader inr;
-// Objeto BufferedReader que o método irá receber.
+// atributo bfr do tipo BufferedReader
     private BufferedReader bfr;
 
     /*Aqui temos o método construtor que recebe o objeto socket como parâmetro
@@ -94,12 +95,17 @@ public class Servidor extends Thread {
             /*O BufferedWriter envia os dados para a saída desejada imediatamente
               ao invês de ir um por vez.*/
             BufferedWriter bfw = new BufferedWriter(ouw);
+           //adiciona na lista cliente o buffer, o que foi escrito 
             clientes.add(bfw);
             nome = msg = bfr.readLine();
-
+            
+           // enquanto diferente de sair e diferente de null
+           //as mensagens são enviadas como parametro pelo metodo senToAll
+           //sendo printado no console
             while (!"Sair".equalsIgnoreCase(msg) && msg != null) {
                 msg = bfr.readLine();
-                sendToAll(bfw, msg);
+               //se não clicou em sair envia essas informações digitadas passadas como parametro no metodo sendToAll() 
+               sendToAll(bfw, msg);
                 System.out.println(msg);
             }
 
@@ -113,10 +119,12 @@ public class Servidor extends Thread {
     public void sendToAll(BufferedWriter bwSaida, String msg) throws IOException {
         BufferedWriter bwS;
         
-        /*Condicional que joga a mensagem escrita para o servidor*/
+        //for percorrendo cada cliente de tipo BufferedWriter castiando cada para variavel bwS
         for (BufferedWriter bw : clientes) {
+           //
             bwS = (BufferedWriter) bw;
-           //o que faz esse if
+           //se não foi solicitado a saida
+           //printe a mensagem na tela e depois limpe o buffer
             if (!(bwSaida == bwS)) {
                 // É assim que ficara na tela
                 bw.write(nome + " -> " + msg + "\r\n");
@@ -144,9 +152,11 @@ public class Servidor extends Thread {
             /*JOptionPane possibilita a criação de uma caixa de dialogo padrão 
             que ou solicita um valor para o usuário ou retorna uma informação.*/
             JOptionPane.showMessageDialog(null, texts);
+           //colocando no objeto server apos passar a porta digitada e parciada de string para integer
             server = new ServerSocket(Integer.parseInt(txtPorta.getText()));
             clientes = new ArrayList<BufferedWriter>();
-            JOptionPane.showMessageDialog(null, "Servidor ativo na porta: "
+            //mensagem para o cliente apresentando servidor ativo em porta xxxx  
+           JOptionPane.showMessageDialog(null, "Servidor ativo na porta: "
                     + txtPorta.getText());
 
             /*Condicional de quando for verdadeira ele irá startar o servidor
@@ -154,8 +164,10 @@ public class Servidor extends Thread {
               ira aparecer uma mensagem informando a conexão*/
             while (true) {
                 System.out.println("Aguardando conexão...");
+               //passando para variavel do tipo Socket a conexão feita pelo metodo accept()
                 Socket con = server.accept();
                 System.out.println("Cliente conectado...");
+               //criando uma thead para cada conexão, cada cliente recebe o t.start(), isso é, se conecta
                 Thread t = new Servidor(con);
                 t.start();
             }
