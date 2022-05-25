@@ -116,6 +116,7 @@ public class Servidor extends Thread {
         /*Condicional que joga a mensagem escrita para o servidor*/
         for (BufferedWriter bw : clientes) {
             bwS = (BufferedWriter) bw;
+           //o que faz esse if
             if (!(bwSaida == bwS)) {
                 // É assim que ficara na tela
                 bw.write(nome + " -> " + msg + "\r\n");
